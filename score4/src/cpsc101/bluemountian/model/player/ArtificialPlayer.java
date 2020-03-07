@@ -6,13 +6,15 @@ import cpsc101.bluemountian.model.board.Move;
 import java.awt.*;
 
 public class ArtificialPlayer extends Player implements CanPlay{
-
+    Move toPlay;
     public ArtificialPlayer(String name, Color color) {
         super(name, color);
     }
 
     @Override
-    public Move getMove(Board board) {
-        return new Move(0,0,0);
+    public Move getMove() {
+        return new Move(0,0);
     }
+
+    public void setMove(Board board){};
 }

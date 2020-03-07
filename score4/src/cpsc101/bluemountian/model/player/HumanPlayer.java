@@ -12,7 +12,11 @@ public class HumanPlayer extends Player implements CanPlay{
     }
 
     @Override
-    public Move getMove(Board board) {
+    public Move getMove() {
         return new Move(0,0);
+    }
+
+    public void setMove(){
+
     }
 }
