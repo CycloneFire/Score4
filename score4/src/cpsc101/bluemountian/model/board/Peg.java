@@ -24,6 +24,10 @@ public class Peg {
         return beads;
     }
 
+    public int getBeadCount() {
+        return beadCount;
+    }
+
     public Boolean addBead(Player player){
         beadCount++;
         if(beadCount==4)return false;

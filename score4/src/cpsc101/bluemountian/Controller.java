@@ -9,6 +9,8 @@ import cpsc101.bluemountian.view.components.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 
 
 public class Controller {
@@ -103,6 +105,50 @@ public class Controller {
             }
         });
     }
+
+
+    private void ActionManagerBoard(GameFrame component){
+        component.addBoardComponentMouseMotionListener(new MouseMotionListener() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+
+                int x = component.getBoardComponent().getSize().width;
+                int y = component.getBoardComponent().getSize().height;;
+                int size = y;
+                int xgap = (x - y) / 2;
+                int ygap = 0;
+
+                if (y > x) {
+                    size = x;
+                    xgap = 0;
+                    ygap = (y - x) / 2;
+                }
+                int pegXGap = size * 165 / 1000;
+                int pegYGap = size * 75 / 1000;
+                int pegHeight = size * 100 / 1000;
+                int pegWidth = size * 35 / 1000;
+                outerloop:
+                for (int i = 0; i < 4; i++) {
+                    for (int j = 0; j < 4; j++) {
+                        if (e.getX() > xgap + size * 103 / 1000 + pegXGap * j + pegYGap * i
+                                && e.getX() < xgap + size * 138 / 1000 + pegXGap * j + pegYGap * i + pegWidth
+                                && e.getY() > ygap + size * 525 / 1000 - pegYGap * i
+                                && e.getY() < ygap + size * 525 / 1000 - pegYGap * i + pegHeight) {
+                          component.getBoardComponent().setHoverLocation(i, j, board.getPeg(i,j).getBeadCount());
+                            break outerloop;
+                        } else {
+                            component.getBoardComponent().setHoverLocation(10, 10, 10);
+                        }
+                    }
+                }
+            }
+        });
+    }
+
 
     private void addGameToFrame(){
         GameFrame game = new GameFrame(board,player1[0].getColor(),player2[0].getColor());
