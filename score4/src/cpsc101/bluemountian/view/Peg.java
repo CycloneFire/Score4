@@ -28,7 +28,7 @@ public class Peg {
         for (int i = 0; i < 4; i++) {
             if (beads[i] == 0) {
                 beads[i] = colorNumber;
-                boardComponent.addBead(pegYLocation, pegXLocation, i, colorNumber);
+                //boardComponent.addBead(pegYLocation, pegXLocation, i, colorNumber);
                 break;
             }
         }

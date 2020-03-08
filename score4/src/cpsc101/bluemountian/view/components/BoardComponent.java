@@ -11,21 +11,39 @@ public class BoardComponent extends JComponent {
     int hoverY = 10;
     int hoverZ = 0;
     Color turnColor = new Color(255, 255, 255, 128);
+    Color p1Color;
+    Color p2Color;
     int[][][] beads = new int[4][4][4];
+    Board model;
 
-    public BoardComponent(Board board) {
-
+    public BoardComponent(){
+        setPreferredSize(new Dimension(400,400));
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 for (int k = 0; k < 4; k++) {
-                    beads[i][j][k] = 0;
-                    if(board.getPeg(i,j).getBead(k).isSet())beads[i][j][k]+= 1;
-                    if(board.getPeg(i,j).getBead(k).isSet())beads[i][j][k]+= 1;
+                    beads[i][j][k] = 1;
                 }
             }
         }
     }
+    public BoardComponent(Board model,Color p1Color,Color p2Color) {
+        this(); // Calls default constructor above to initialise beads
+        this.model=model;
+        this.p1Color=p1Color;
+        this.p2Color=p2Color;
 
+    }
+
+
+
+    public void setModel(Board model) {
+        this.model = model;
+    }
+
+    public void setPlayerColors(Color c1,Color c2){
+        p1Color=c1;
+        p2Color=c2;
+    }
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
 
@@ -40,9 +58,8 @@ public class BoardComponent extends JComponent {
             ygap = (y - x) / 2;
         }
 
-        g2.setStroke(new BasicStroke(5));
         //draw background
-        g2.setColor(Color.WHITE);
+        g2.setColor(new Color(255, 242, 231));
         g2.fill(new Rectangle(xgap, ygap, size, size));
         //draw board
         //right side of the board
@@ -97,10 +114,10 @@ public class BoardComponent extends JComponent {
 
                 for (int k = 0; k < 4; k++) {
                     if (beads[i][j][k] == 1) {
-                        g2.setColor(Color.WHITE);
+                        g2.setColor(p1Color);
                         g2.fill(new Rectangle(xgap + size * 123 / 1000 + pegXGap * i + pegYGap * j, ygap + size * 600 / 1000 - pegYGap * j - k * (beady + size * 4 / 1000), beadx, beady));
                     } else if (beads[i][j][k] == 2) {
-                        g2.setColor(Color.BLACK);
+                        g2.setColor(p2Color);
                         g2.fill(new Rectangle(xgap + size * 123 / 1000 + pegXGap * i + pegYGap * j, ygap + size * 600 / 1000 - pegYGap * j - k * (beady + size * 4 / 1000), beadx, beady));
                     }
                 }
@@ -108,13 +125,13 @@ public class BoardComponent extends JComponent {
         }
     }
 
-    public void addBead(int i, int j, int k, int colorNumber) {
-        beads[i][j][k] = colorNumber;
-        if (k < 3) {
-            setHoverLocation(j, i, k + 1);
-        }
-        repaint();
-    }
+//    public void addBead(int i, int j, int k, int colorNumber) {
+//        beads[i][j][k] = colorNumber;
+//        if (k < 3) {
+//            setHoverLocation(j, i, k + 1);
+//        }
+//        repaint();
+//    }
 
     public void setHoverLocation(int i, int j, int k) {
         hoverX = j;
