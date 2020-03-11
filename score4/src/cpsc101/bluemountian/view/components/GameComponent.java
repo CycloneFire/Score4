@@ -9,13 +9,13 @@ import java.awt.*;
 import java.awt.event.*;
 
 
-public class GameFrame extends JComponent {
-    private static final int FRAME_WIDTH = 900;
+public class GameComponent extends JComponent {
+    private static final int FRAME_WIDTH = 800;
     private static final int FRAME_HEIGHT = 600;
 
     private BoardComponent boardComponent;
 
-    public GameFrame(Board model,Color p1Col, Color p2Col){
+    public GameComponent(Board model, Color p1Col, Color p2Col){
         setLayout(new BorderLayout());
 
         boardComponent = new BoardComponent(model,p1Col,p2Col);

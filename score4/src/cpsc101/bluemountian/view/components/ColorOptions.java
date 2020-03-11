@@ -33,8 +33,6 @@ public class ColorOptions extends JComponent {
         g2.setColor(Color.CYAN);
         g2.drawRect(rectWidth*selected + 10*selected, 2,rectWidth,48);// same as above
 
-
-
     }
 
     public void setHover(int place) {

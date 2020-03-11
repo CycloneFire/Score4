@@ -14,8 +14,6 @@ public class Peg {
         beadCount=0;
     }
 
-    public void updatePeg(){}
-
     public Bead getBead(int i) {
         return beads[i];
     }
@@ -29,10 +27,9 @@ public class Peg {
     }
 
     public Boolean addBead(Player player){
-        beadCount++;
         if(beadCount==4)return false;
         beads[beadCount].setBead(player);
-        updatePeg();
+        beadCount++;
         return true;
     }
 }

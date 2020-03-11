@@ -10,24 +10,13 @@ public class BoardComponent extends JComponent {
     int hoverX = 10;
     int hoverY = 10;
     int hoverZ = 0;
-    Color turnColor = new Color(255, 255, 255, 128);
+    Color hoverColor = new Color(255, 255, 255, 128);
     Color p1Color;
     Color p2Color;
-    int[][][] beads = new int[4][4][4];
     Board model;
 
-    public BoardComponent(){
-        setPreferredSize(new Dimension(400,400));
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                for (int k = 0; k < 4; k++) {
-                    beads[i][j][k] = 0;
-                }
-            }
-        }
-    }
+
     public BoardComponent(Board model,Color p1Color,Color p2Color) {
-        this(); // Calls default constructor above to initialise beads
         this.model=model;
         this.p1Color=p1Color;
         this.p2Color=p2Color;
@@ -46,6 +35,7 @@ public class BoardComponent extends JComponent {
     }
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
 
         int x = getSize().width;
         int y = getSize().height;
@@ -101,47 +91,31 @@ public class BoardComponent extends JComponent {
         }
 
         //Hover
-        //Missing color
-        //Missing height
         int beadx = size * 40 / 1000;
         int beady = size * 20 / 1000;
-        g2.setColor(turnColor);
+        g2.setColor(hoverColor);
         g2.fill(new Rectangle(xgap + size * 123 / 1000 + pegXGap * hoverX + pegYGap * hoverY, ygap + size * 600 / 1000 - pegYGap * hoverY - hoverZ * (beady + size * 4 / 1000), beadx, beady));
 
         //Place beads
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-
                 for (int k = 0; k < 4; k++) {
-                    if (beads[i][j][k] == 1) {
-                        g2.setColor(p1Color);
-                        g2.fill(new Rectangle(xgap + size * 123 / 1000 + pegXGap * i + pegYGap * j, ygap + size * 600 / 1000 - pegYGap * j - k * (beady + size * 4 / 1000), beadx, beady));
-                    } else if (beads[i][j][k] == 2) {
-                        g2.setColor(p2Color);
-                        g2.fill(new Rectangle(xgap + size * 123 / 1000 + pegXGap * i + pegYGap * j, ygap + size * 600 / 1000 - pegYGap * j - k * (beady + size * 4 / 1000), beadx, beady));
+                    if (model.getPeg(i,j).getBead(k).isSet()) {
+                        g2.setColor(model.getPeg(i,j).getBead(k).getColor());
+                        g2.fillRect(xgap + size * 123 / 1000 + pegXGap * j + pegYGap * i, ygap + size * 600 / 1000 - pegYGap * i - k * (beady + size * 4 / 1000), beadx, beady);
                     }
                 }
             }
         }
     }
 
-//    public void addBead(int i, int j, int k, int colorNumber) {
-//        beads[i][j][k] = colorNumber;
-//        if (k < 3) {
-//            setHoverLocation(j, i, k + 1);
-//        }
-//        repaint();
-//    }
-
-    public void setHoverLocation(int i, int j, int k) {
+    public void setHoverLocation(int i, int j, int k, Color hoverColor) {
         hoverX = j;
         hoverY = i;
-        hoverZ = k;
+        if(k<4) hoverZ = k; else hoverZ=3;
+        this.hoverColor = new Color(hoverColor.getRed(), hoverColor.getGreen(), hoverColor.getBlue(), 128);
         repaint();
     }
 
-    public void setTurnColor(Color turnColor) {
-        this.turnColor = new Color(turnColor.getRed(), turnColor.getGreen(), turnColor.getBlue(), 128);
-    }
 }
 

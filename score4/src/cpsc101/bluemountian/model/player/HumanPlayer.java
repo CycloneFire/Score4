@@ -7,16 +7,24 @@ import java.awt.*;
 
 public class HumanPlayer extends Player implements CanPlay{
 
+    private Move move;
+    private Boolean hasMove=false;
     public HumanPlayer(String name, Color color) {
         super(name, color);
     }
 
     @Override
     public Move getMove() {
-        return new Move(0,0);
+        hasMove=false;
+        return move;
     }
 
-    public void setMove(){
+    public void setMove(Move move){
+        this.move= move;
+        hasMove=true;
+    }
 
+    public Boolean getHasMove(){
+        return hasMove;
     }
 }
