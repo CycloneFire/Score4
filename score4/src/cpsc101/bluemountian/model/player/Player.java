@@ -37,4 +37,14 @@ public class Player {
     public String toString(){
         return name+" : "+color.toString();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        System.out.println("fmkc");
+        if(obj instanceof Player){
+            System.out.println("tmkc");
+            return ((Player) obj).getColor() == color && ((Player) obj).getName().equals(name);
+        }
+        return false;
+    }
 }

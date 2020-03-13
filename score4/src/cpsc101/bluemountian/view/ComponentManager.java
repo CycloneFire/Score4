@@ -28,6 +28,21 @@ public class ComponentManager extends JFrame {
         setLocationRelativeTo(null);
         add(components.get(currentState));
 
+
+    }
+
+    public void reInit(){
+        remove(components.get(currentState));
+        components.removeAll(components);
+        components.add(new IntroComponent());
+        components.add(new PlayerInfoComponent("Player 1"));
+        components.add(new PlayerInfoComponent("Player 2"));
+        currentState=0;
+        add(components.get(currentState));
+        revalidate();
+        repaint();
+        pack();
+        setLocationRelativeTo(null);
     }
 
     @Override

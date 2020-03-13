@@ -32,6 +32,10 @@ public class RightPanel extends JPanel {
         add(buttonsPanel, BorderLayout.SOUTH);
     }
 
+    public void setPlayerNames(String pl1,String pl2){
+        player1Label.setText(pl1);
+        player2Label.setText(pl2);
+    }
 
     private JPanel createInfoPanel() {
         JPanel playerGroupPanel = createScorePanel();
@@ -95,19 +99,19 @@ public class RightPanel extends JPanel {
 
     public void setPlayer1Name(String name) {
         player1Name = name;
-        player1Label.setText(player1Name + "...... " + player1Score);
+        player1Label.setText(player1Name + ":     " + player1Score);
     }
-    public void setPlayer1Score(int score) {
-        player1Score = score;
-        player1Label.setText(player1Name + "...... " + player1Score);
+    public void incrementPlayer1Score() {
+        player1Score++;
+        player1Label.setText(player1Name + ":     " + player1Score);
     }
     public void setPlayer2Name(String name) {
         player2Name = name;
-        player2Label.setText(player2Name + "...... " + player2Score);
+        player2Label.setText(player2Name + ":     " + player2Score);
     }
-    public void setPlayer2Score(int score) {
-        player2Score = score;
-        player2Label.setText(player2Name + "...... " + player2Score);
+    public void incrementPlayer2Score() {
+        player2Score++;
+        player2Label.setText(player2Name + ":     " + player2Score);
     }
 
     public void addQuitButtonListener(ActionListener listener) {

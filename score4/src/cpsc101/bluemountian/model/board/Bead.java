@@ -31,6 +31,12 @@ public class Bead extends Player {
         set=true;
     }
 
+    public void setBead(Bead player){
+        super.setColor(player.getColor());
+        super.setName(player.getName());
+        set=true;
+    }
+
     public Boolean isSet() {
         return set;
     }

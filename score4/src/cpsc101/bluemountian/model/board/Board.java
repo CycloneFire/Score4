@@ -15,6 +15,8 @@ public class Board {
         return pegs[i][j];
     }
 
+    public Peg getPeg(Move move){return pegs[move.getX()][move.getY()];}
+
     public Peg[][] getPegs() {
         return pegs;
     }
@@ -25,6 +27,9 @@ public class Board {
         return added;
     }
 
+    public void reInit(){
+        for(int i=0;i<16;i++)pegs[i/4][i%4]=new Peg();
+    }
     public boolean isWon(){
         return false;
     }

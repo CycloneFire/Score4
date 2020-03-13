@@ -19,6 +19,11 @@ public class HumanPlayer extends Player implements CanPlay{
         return move;
     }
 
+    @Override
+    public void resetMove() {
+        hasMove=false;
+    }
+
     public void setMove(Move move){
         this.move= move;
         hasMove=true;

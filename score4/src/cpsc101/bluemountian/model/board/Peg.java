@@ -10,7 +10,7 @@ public class Peg {
     private int beadCount;
 
     public Peg(){
-        for(int i=0;i<4;i++)beads[i]=new Bead();  //Initialise empty Beads
+        for(int i=0;i<4;i++)beads[i]=new Bead();  // Initialise empty Beads
         beadCount=0;
     }
 
@@ -18,8 +18,8 @@ public class Peg {
         return beads[i];
     }
 
-    public Bead[] getBeads() {
-        return beads;
+    public void removeBeads(){
+        for(int i=0;i<4;i++)beads[i]=new Bead();  // Empty all Beads
     }
 
     public int getBeadCount() {

@@ -5,4 +5,5 @@ import cpsc101.bluemountian.model.board.Move;
 
 public interface CanPlay {
     Move getMove();
+    void resetMove();
 }

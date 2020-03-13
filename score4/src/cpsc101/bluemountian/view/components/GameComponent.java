@@ -14,12 +14,13 @@ public class GameComponent extends JComponent {
     private static final int FRAME_HEIGHT = 600;
 
     private BoardComponent boardComponent;
+    private RightPanel rightPanel;
 
     public GameComponent(Board model, Color p1Col, Color p2Col){
         setLayout(new BorderLayout());
 
         boardComponent = new BoardComponent(model,p1Col,p2Col);
-        RightPanel rightPanel = new RightPanel();
+         rightPanel = new RightPanel();
 
         add(boardComponent, BorderLayout.CENTER);
         add(rightPanel, BorderLayout.EAST);
@@ -30,6 +31,8 @@ public class GameComponent extends JComponent {
     public BoardComponent getBoardComponent() {
         return boardComponent;
     }
+
+    public RightPanel getRightPanel() {return rightPanel;}
 
     public void addBoardComponentMouseMotionListener(MouseMotionListener listener) {
         boardComponent.addMouseMotionListener(listener);
