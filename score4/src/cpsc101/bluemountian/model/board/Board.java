@@ -2,7 +2,7 @@ package cpsc101.bluemountian.model.board;
 
 import cpsc101.bluemountian.model.player.Player;
 
-public class Board implements Cloneable{
+public class Board{
     private Peg[][] pegs = new Peg[4][4];
 
     public Board(){
@@ -22,11 +22,28 @@ public class Board implements Cloneable{
         if(added)updateBoard();
     }
 
-    @Override
-    public Object clone()throws CloneNotSupportedException{
-        return super.clone();
+    public Peg[][] getPegs() {
+        return pegs;
     }
 
+    public void setPegs(Peg[][] pegs) { // Avoids copying of reference of pegs
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                for (int k = 0; k < pegs[i][j].getBeadCount(); k++) {
+                    this.pegs[i][j].addBead(pegs[i][j].getBead(k));
+                }
+            }
+        }
+    }
+
+    public void print(){
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                System.out.print("["+pegs[i][j].getBeadCount()+"]\t");
+            }
+            System.out.println();
+        }
+    }
     public void reInit(){
         for(int i=0;i<16;i++)pegs[i/4][i%4]=new Peg();
     }

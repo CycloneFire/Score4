@@ -22,7 +22,7 @@ public class IntroComponent extends JComponent {
         JPanel buttons = createButtons();
         add(title, BorderLayout.NORTH);
         add(buttons, BorderLayout.CENTER);
-
+        console.setEnabled(false);
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
     }
 

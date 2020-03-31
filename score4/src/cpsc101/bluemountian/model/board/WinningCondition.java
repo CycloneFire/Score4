@@ -40,8 +40,8 @@ public class WinningCondition {
         }
     }
 
-    public int[][][] getGrid() {
-        return grid;
+    public int getMoveCount() {
+        return moveCount;
     }
 
     public int corX(int i){

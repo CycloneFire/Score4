@@ -13,6 +13,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.time.Clock;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -32,6 +33,7 @@ public class Controller {
     private int currentRun=0;
     private boolean firstMoveSet = false;
     private static int AI_SLEEP_TIME = 500;
+    private int moveCount=0;
 
 
 
@@ -43,6 +45,7 @@ public class Controller {
         currentRun++;
         gameEnded.add(false);
         this.board.addAction(()->{
+            moveCount++;
             currentTurn=!currentTurn;
             game.getBoardComponent().repaint();
             // This creates a hover effect just after adding a bead, takes last move of alternating player and creates
@@ -102,7 +105,7 @@ public class Controller {
         });
 
         component.addInstructionListener(e->showDialog("Instructions",
-                "This was created by Blue Mountain",()->{}));
+                "This was created by Blue Mountain",()->{},true));
         component.addQuitListener(e->System.exit(1));
 
     }
@@ -125,7 +128,7 @@ public class Controller {
                     frame.addComponent(new TurnComponent(player1[0].getName(),player2[0].getName()));
                     actionManagerThird((TurnComponent) frame.getComponent(3));
                     frame.advanceState(2);
-            }else showDialog("Error","Enter Player Name!",()->{});
+            }else showDialog("Error","Enter Player Name!",()->{},true);
             }else if(gameMode==1){
                 if(component.validateInput()){
                     if(frame.getCurrentState()==1){
@@ -139,7 +142,7 @@ public class Controller {
                         actionManagerThird((TurnComponent) frame.getComponent(3));
                         frame.advanceState(1);
                     }
-                }else showDialog("Error","Enter Player Name!",()->{});
+                }else showDialog("Error","Enter Player Name!",()->{},true);
             }
         });
     }
@@ -255,7 +258,6 @@ public class Controller {
                                     && e.getY() < ygap + size * 525 / 1000 - pegYGap * i + pegHeight) {
                                 if(gameMode==0){
                                     if(!currentTurn)((HumanPlayer) player1[0]).setMove(new Move(i, j));
-                                    System.out.println("i is: "+i+" j is: "+j);
                                     mouseMoved=false;
                                 }else if(gameMode == 1){
                                     if(!currentTurn) {
@@ -315,6 +317,7 @@ public class Controller {
 
     private void resetBoard(){
         currentTurn=false;
+        moveCount=0;
         ((CanPlay) player1[0]).resetMove();
         ((CanPlay) player2[0]).resetMove();
         firstMoveSet=false;
@@ -329,36 +332,7 @@ public class Controller {
         int threadNum = currentRun;
         gameEnded.add(false);
         Thread T = new Thread(()->{
-            System.out.println("I m invincible : "+threadNum);
             while(!gameEnded.get(threadNum)) {
-                Bead winFind =  win.winCheck();
-                if(winFind.isSet()){
-                    gameEnded.set(threadNum,true);
-                    if (winFind.getColor() == player1[0].getColor()){
-                        game.getBoardComponent().setWinningBeads(win.getWinningMove());
-                        game.getBoardComponent().setWinner(player1[0]);
-                        game.getRightPanel().incrementPlayer1Score();
-                    }
-                    else if(winFind.getColor() == player2[0].getColor()){
-                        Move3D[] move = new Move3D[]{new Move3D(2,2,2),new Move3D(3,3,3),
-                                new Move3D(1,1,1),new Move3D(0,0,0)};
-                        game.getBoardComponent().setWinningBeads(move);
-                        game.getBoardComponent().setWinner(player1[0]);
-                        game.getBoardComponent().setWinner(player2[0]);
-                        game.getRightPanel().incrementPlayer2Score();
-                    }
-                    showDialog("Game Complete",winFind.getName()+" won the game.",()->
-                        show2ButtonDialog("Restart game?","Do you want to play again?","Yes",
-                                ()->{
-                                    resetBoard();
-                                    game.getBoardComponent().repaint();
-                                    gameManager();
-                                },-1)
-                    );
-                    break;
-                }
-
-
                 if (gameMode == 0) {
                     if(!currentTurn){
                         while(!((HumanPlayer) player1[0]).getHasMove() && !gameEnded.get(currentRun)){
@@ -370,8 +344,15 @@ public class Controller {
                         }
                     }else{
                         try {
+                            long timeBefore= Clock.systemDefaultZone().millis();
                             ((ArtificialPlayer) player2[0]).setMove(board,player1[0]);
-                            Thread.sleep(AI_SLEEP_TIME);  // Wait half a second before A.I Plays its move
+                            long timeAfter= Clock.systemDefaultZone().millis();
+
+                            if((timeAfter-timeBefore)<=AI_SLEEP_TIME){
+                                //If time took to calculate move is greater then AI_SLEEP_TIME, don't sleep
+                                Thread.sleep(AI_SLEEP_TIME-(timeAfter-timeBefore));
+                            }
+
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -397,10 +378,24 @@ public class Controller {
                         }
                     }
                 }else if (gameMode == 2) {
+                    long timeBefore=0;
+                    long timeAfter=0;
                     if(!currentTurn){
                         try {
-                            ((ArtificialPlayer) player1[0]).setMove(board,player2[0]);
-                            Thread.sleep(AI_SLEEP_TIME);  // Wait half a second before A.I Plays its move
+                            if(!firstMoveSet){
+                                firstMoveSet=true;
+                                ((ArtificialPlayer) player1[0]).setRandomMove();    // Play random at first
+                            }
+                            else {
+                                timeBefore=Clock.systemDefaultZone().millis();
+                                ((ArtificialPlayer) player1[0]).setMove(board,player2[0]);  // Then Predict
+                                timeAfter=Clock.systemDefaultZone().millis();
+                            }
+                            if((timeAfter-timeBefore)<=AI_SLEEP_TIME){
+                                //If time took to calculate move is greater then AI_SLEEP_TIME, don't sleep
+                                Thread.sleep(AI_SLEEP_TIME-(timeAfter-timeBefore));
+                            }
+
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -410,8 +405,19 @@ public class Controller {
 
                     }else{
                         try {
-                            ((ArtificialPlayer) player2[0]).setMove(board,player1[0]);
-                            Thread.sleep(AI_SLEEP_TIME);  // Wait half a second before A.I Plays its move
+                            if(!firstMoveSet){
+                                firstMoveSet=true;
+                                ((ArtificialPlayer) player2[0]).setRandomMove();    // Play random at first
+                            }
+                            else{
+                                timeBefore = Clock.systemDefaultZone().millis();
+                                ((ArtificialPlayer) player2[0]).setMove(board,player1[0]);  // Then Predict
+                                timeAfter = Clock.systemDefaultZone().millis();
+                            }
+                            if((timeAfter-timeBefore)<=AI_SLEEP_TIME){
+                                //If time took to calculate move is greater then AI_SLEEP_TIME, don't sleep
+                                Thread.sleep(AI_SLEEP_TIME-(timeAfter-timeBefore));
+                            }
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -421,10 +427,52 @@ public class Controller {
 
                     }
                 }
+                if(findWinner(threadNum)){
+                    break;  // Break loop and thread if someone wins the game.
+                }
+                if(moveCount==64){
+                    showDialog("Game Complete","Game is a draw.",()->
+                            show2ButtonDialog("Restart game?","Do you want to play again?","Yes",
+                                    ()->{
+                                        resetBoard();
+                                        game.getBoardComponent().repaint();
+                                        gameManager();
+                                    },-1),false);
+                    break;
+                }
             }
         });
         T.start();
 
+    }
+
+    // Simply sets winner and notifies view about it.
+    private boolean findWinner(int threadNum){
+        Bead winFind =  win.winCheck();
+        if(winFind.isSet()){
+            gameEnded.set(threadNum,true);
+            if (winFind.getColor() == player1[0].getColor()){
+                game.getBoardComponent().setWinningBeads(win.getWinningMove());
+                game.getBoardComponent().setWinner(player1[0]);
+                game.getRightPanel().incrementPlayer1Score();
+            }
+            else if(winFind.getColor() == player2[0].getColor()){
+                Move3D[] move = new Move3D[]{new Move3D(2,2,2),new Move3D(3,3,3),
+                        new Move3D(1,1,1),new Move3D(0,0,0)};
+                game.getBoardComponent().setWinningBeads(win.getWinningMove());
+                game.getBoardComponent().setWinner(player2[0]);
+                game.getRightPanel().incrementPlayer2Score();
+            }
+            showDialog("Game Complete",winFind.getName()+" won the game.",()->
+                    show2ButtonDialog("Restart game?","Do you want to play again?","Yes",
+                            ()->{
+                                resetBoard();
+                                game.getBoardComponent().repaint();
+                                gameManager();
+                            },-1),false);
+
+        }
+        return  winFind.isSet();
     }
 
     private void addGameToFrame(){
@@ -436,10 +484,10 @@ public class Controller {
         gameManager();
     }
 
-    private void showDialog(String title,String errorMsg,Runnable runner){
+    private void showDialog(String title,String errorMsg,Runnable runner, boolean centered){
         JDialog dialog = new JDialog(frame, title);
-        dialog.setUndecorated(true);
-        dialog.setOpacity(0.7f);
+        //dialog.setUndecorated(true);
+        //dialog.setOpacity(0.7f);
         dialog.setLayout(new BorderLayout());
 
         JLabel label = new JLabel(errorMsg);
@@ -457,7 +505,17 @@ public class Controller {
         dialog.add(okBtn,BorderLayout.SOUTH);
 
         dialog.pack();
-        dialog.setLocationRelativeTo(frame);
+
+        if(centered){
+            dialog.setLocationRelativeTo(frame);
+        }
+        else{
+            dialog.setLocation(frame.getLocation().x+(frame.getWidth()/2)-dialog.getWidth()/2
+                    ,frame.getLocation().y);
+        }
+
+
+
         dialog.setVisible(true);
     }
 

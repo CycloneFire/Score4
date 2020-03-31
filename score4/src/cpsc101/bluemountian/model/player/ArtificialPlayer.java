@@ -9,6 +9,7 @@ public class ArtificialPlayer extends Player implements CanPlay{
     private Move move;
     private Boolean hasMove = false;
     private Player opposition;
+    private final static int SEARCH_DEPTH = 5;
 
     public ArtificialPlayer(String name, Color color) {
         super(name, color);
@@ -25,16 +26,34 @@ public class ArtificialPlayer extends Player implements CanPlay{
         hasMove=false;
     }
 
-    public void setMove(Board board,Player opposition){
+    public void setRandomMove(){
         hasMove=true;
         Random random = new Random();
-        move=new Move(random.nextInt(4),random.nextInt(4));
-        //this.opposition=opposition;
-        //miniMax(board,3,true);
+        int randomPeg=random.nextInt(16);
+        //System.out.println(((randomPeg/4)-1)+" good "+((randomPeg%4)));
+        move=new Move(randomPeg/4,randomPeg%4);
+    }
+
+    public void setMove(Board board,Player opposition){
+        hasMove=true;
+        this.opposition=opposition;
+        move=null;  // Empty the move
+        miniMax(board,SEARCH_DEPTH,Integer.MIN_VALUE,Integer.MAX_VALUE,true);
+        if(move==null){ // If there are no good moves (all searched moves cause player to lose)
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
+                    if(board.getPeg(new Move(i,j)).canPlace()){
+                        move=new Move(i,j); // Place on first available cell
+                        return;
+                    }
+                }
+
+            }
+        }
     };
 
-
-    private int miniMax(Board board, int depth, boolean maximizingPlayer){
+    // Ahead is miniMax algorithm layered with alpha-beta pruning.
+    private int miniMax(Board board, int depth,int alpha,int beta, boolean maximizingPlayer){
         if(depth==0 || new WinningCondition(board,this.getColor()).winCheck().isSet()){
             // Stop evaluating once highest depth is reached or game has ended
             return (new EvaluateBoard(board,this).getScore());
@@ -43,48 +62,47 @@ public class ArtificialPlayer extends Player implements CanPlay{
             int maxEval = Integer.MIN_VALUE;
             for (int i = 0; i < 4; i++) {   // Looping through all available cells
                 for (int j = 0; j < 4; j++) {
-                    System.out.println("ILOOOPED: "+depth+" I am max");
-                    try{
-                        Board modifiedBoard = (Board)board.clone();
+                        Board modifiedBoard = new Board();
+                        modifiedBoard.setPegs(board.getPegs());
                         // Making a clone of current board, so as to not change it when predicting.
                         if(board.getPeg(new Move(i,j)).canPlace()){
                             modifiedBoard.addBead(new Move(i,j),this);
-                            int eval = miniMax(modifiedBoard,depth-1,false);
-                            System.out.println(eval+" max");
-                            if(eval>maxEval){
-                                move=new Move(i,j);
+                            int eval = miniMax(modifiedBoard,depth-1,alpha,beta,false);
+                            if(eval>maxEval){   // Basic miniMax application
                                 maxEval=eval;
+                                if(depth==SEARCH_DEPTH){    // Set move if highest result is found.
+                                    move=new Move(i,j);
+                                }
+
+                            }
+                            alpha = Math.max(alpha,eval);   // Alpha-Beta Pruning
+                            if(alpha>=beta){
+                                return alpha;
                             }
                         }
-                    }catch (CloneNotSupportedException c){
-                        System.out.println("Cloning error");
-                    }
                 }
             }
-            System.out.println("maxEval: "+maxEval);
             return maxEval;
         }else{
             int minEval = Integer.MAX_VALUE;
             for (int i = 0; i < 4; i++) {   // Looping through all available cells
                 for (int j = 0; j < 4; j++) {
-                    System.out.println("ILOOOPED: "+depth+" I am min");
-                    try{
-                        Board modifiedBoard= (Board) board.clone();
+                        Board modifiedBoard = new Board();
+                        modifiedBoard.setPegs(board.getPegs());
                         // Making a clone of current board, so as to not change it while predicting.
                         if(board.getPeg(new Move(i,j)).canPlace()){
                             modifiedBoard.addBead(new Move(i,j),opposition);
-                            int eval = miniMax(modifiedBoard,depth-1,true);
-                            System.out.println(eval+" min");
-                            if(eval<minEval){
+                            int eval = miniMax(modifiedBoard,depth-1,alpha,beta,true);
+                            if(eval<minEval){   // Basic miniMax application
                                 minEval=eval;
                             }
+                            beta = Math.min(beta,eval); // Alpha-beta pruning
+                            if(alpha>=beta){
+                                return beta;
+                            }
                         }
-                    }catch (CloneNotSupportedException c){
-                        System.out.println("Cloning error");
-                    }
                 }
             }
-            System.out.println("minEval: "+minEval);
             return minEval;
         }
     }
