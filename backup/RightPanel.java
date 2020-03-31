@@ -18,8 +18,8 @@ public class RightPanel extends JPanel {
     private String player2Name = "Placeholder 2";
     private int player1Score = 0;
     private int player2Score = 0;
-    ColorInfo player1ColorChoice;
-    ColorInfo player2ColorChoice;
+
+
 
     public RightPanel() {
         JPanel infoPanel = createInfoPanel();
@@ -30,7 +30,11 @@ public class RightPanel extends JPanel {
         setBorder(BorderFactory.createRaisedBevelBorder());
         add(infoPanel, BorderLayout.NORTH);
         add(buttonsPanel, BorderLayout.SOUTH);
-        goConsoleModeButton.setEnabled(false);
+    }
+
+    public void setPlayerNames(String pl1,String pl2){
+        player1Label.setText(pl1);
+        player2Label.setText(pl2);
     }
 
     private JPanel createInfoPanel() {
@@ -53,24 +57,12 @@ public class RightPanel extends JPanel {
         player1Label = new JLabel("Placeholder");
         player2Label = new JLabel("Placeholder");
 
-
-        player1ColorChoice = new ColorInfo();
-        player2ColorChoice = new ColorInfo();
-
         JPanel panel = new JPanel();
         panel.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridy = 0;
         c.ipady = 30;
-        c.ipadx = 30;
-        c.gridy = 0;
-        c.gridx = 0;
-        panel.add(player1ColorChoice, c);
-        c.gridy = 1;
-        panel.add(player2ColorChoice, c);
-        c.ipadx = 0;
-        c.gridy = 0;
-        c.gridx = 1;
         panel.add(player1Label, c);
         c.gridy = 1;
         panel.add(player2Label, c);
@@ -107,67 +99,19 @@ public class RightPanel extends JPanel {
 
     public void setPlayer1Name(String name) {
         player1Name = name;
-        player1Label.setText("  " + player1Name + ":     " + player1Score);
+        player1Label.setText(player1Name + ":     " + player1Score);
     }
-
-    public void setPlayer1Color(Color player1Color) {
-        player1ColorChoice.setColor(player1Color);
-        player1ColorChoice.repaint();
-    }
-
-    public void setPlayer2Color(Color player2Color) {
-        player2ColorChoice.setColor(player2Color);
-        player2ColorChoice.repaint();
-
-    }
-
-    public void disableButton(int index){
-        switch (index){
-            case 0:
-                goConsoleModeButton.setEnabled(false);
-                break;
-            case 1:
-                mainMenuButton.setEnabled(false);
-                break;
-            case 2:
-                quitButton.setEnabled(false);
-                break;
-            case 3:
-                startNewGameButton.setEnabled(false);
-        }
-    }
-
-    public void disableMe(){
-        mainMenuButton.setEnabled(false);
-    }
-
-    public void enableButton(int index){
-        switch (index){
-            case 0:
-                goConsoleModeButton.setEnabled(true );
-                break;
-            case 1:
-                mainMenuButton.setEnabled(true);
-                break;
-            case 2:
-                quitButton.setEnabled(true);
-                break;
-            case 3:
-                startNewGameButton.setEnabled(true);
-        }
-    }
-
     public void incrementPlayer1Score() {
         player1Score++;
-        player1Label.setText("  " + player1Name + ":     " + player1Score);
+        player1Label.setText(player1Name + ":     " + player1Score);
     }
     public void setPlayer2Name(String name) {
         player2Name = name;
-        player2Label.setText("  " + player2Name + ":     " + player2Score);
+        player2Label.setText(player2Name + ":     " + player2Score);
     }
     public void incrementPlayer2Score() {
         player2Score++;
-        player2Label.setText("  " + player2Name + ":     " + player2Score);
+        player2Label.setText(player2Name + ":     " + player2Score);
     }
 
     public void addQuitButtonListener(ActionListener listener) {

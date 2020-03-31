@@ -77,7 +77,6 @@ public class PlayerInfoComponent extends JComponent {
             label.setFont(new Font(label.getFont().getName(), Font.PLAIN, 36));
             label.setHorizontalAlignment(JLabel.CENTER);
             label.setVerticalAlignment(JLabel.CENTER);
-
             return label;
         }
 

@@ -3,6 +3,7 @@ package cpsc101.bluemountian.view;
 import cpsc101.bluemountian.view.components.BoardComponent;
 import cpsc101.bluemountian.view.components.IntroComponent;
 import cpsc101.bluemountian.view.components.PlayerInfoComponent;
+import cpsc101.bluemountian.view.components.TurnComponent;
 
 import javax.swing.*;
 import java.awt.*;

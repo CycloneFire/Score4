@@ -18,8 +18,9 @@ public class Peg {
         return beads[i];
     }
 
-    public void removeBeads(){
-        for(int i=0;i<4;i++)beads[i]=new Bead();  // Empty all Beads
+    public boolean canPlace(){
+        return beadCount != 4;
+
     }
 
     public int getBeadCount() {

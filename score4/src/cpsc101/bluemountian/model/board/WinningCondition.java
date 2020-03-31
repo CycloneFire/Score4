@@ -10,12 +10,19 @@ public class WinningCondition {
     private Board model;
     private int moveCount;
     private Color p1Col;
+    private Move3D[] winningMoves;
 
     public WinningCondition(Board model,Color p1Col){
         this.model=model;
         this.p1Col=p1Col;
         boardToGrid();
-        
+        winningMoves = new Move3D[]
+                {new Move3D(0, 0, 0), new Move3D(1, 1, 1),
+                        new Move3D(2, 2, 2), new Move3D(3, 3, 3)};
+    }
+
+    public Move3D[] getWinningMove(){
+        return winningMoves;
     }
 
     private void boardToGrid(){
@@ -24,13 +31,17 @@ public class WinningCondition {
                 for (int k = 0; k < 4; k++) {
                     if (model.getPeg(i,j).getBead(k).isSet()) {
                         moveCount++;
-                        if(model.getPeg(i,j).getBead(k).getColor()==p1Col)grid[i][j][k] =1;
-                        else grid[i][j][k]=2;
-                        
+                        if(model.getPeg(i,j).getBead(k).getColor()==p1Col)grid[i][j][k] =2;
+                        else grid[i][j][k]=1;
+
                     }else grid[i][j][k] = 0;
                 }
             }
         }
+    }
+
+    public int[][][] getGrid() {
+        return grid;
     }
 
     public int corX(int i){
@@ -57,6 +68,10 @@ public class WinningCondition {
             {
                 // When win is vertical, all beads have information about winning player.
                 winner.setBead(model.getPeg(new Move(coOrd[0],coOrd[1])).getBead(0));
+                winningMoves[0]=new Move3D(coOrd[0],coOrd[1],0);
+                winningMoves[1]=new Move3D(coOrd[0],coOrd[1],1);
+                winningMoves[2]=new Move3D(coOrd[0],coOrd[1],2);
+                winningMoves[3]=new Move3D(coOrd[0],coOrd[1],3);
             } }
     
       if (!winner.isSet()){
@@ -68,6 +83,10 @@ public class WinningCondition {
                             (grid[i][3][k] != 0))
                     {
                         winner.setBead(model.getPeg(new Move(i,0)).getBead(k));
+                        winningMoves[0]=new Move3D(i,0,k);
+                        winningMoves[1]=new Move3D(i,1,k);
+                        winningMoves[2]=new Move3D(i,2,k);
+                        winningMoves[3]=new Move3D(i,3,k);
                     } }
     
                 if ((grid[i][0][0] == grid[i][1][1]) &&
@@ -76,6 +95,10 @@ public class WinningCondition {
                         (grid[i][3][3] !=0))
                 {
                     winner.setBead(model.getPeg(new Move(i,0)).getBead(0));
+                    winningMoves[0]=new Move3D(i,0,0);
+                    winningMoves[1]=new Move3D(i,1,1);
+                    winningMoves[2]=new Move3D(i,2,2);
+                    winningMoves[3]=new Move3D(i,3,3);
                 }
     
                 if ((grid[i][0][3] == grid[i][1][2]) &&
@@ -84,6 +107,10 @@ public class WinningCondition {
                         (grid[i][3][0] !=0))
                 {
                     winner.setBead(model.getPeg(new Move(i,0)).getBead(3));
+                    winningMoves[0]=new Move3D(i,0,3);
+                    winningMoves[1]=new Move3D(i,1,2);
+                    winningMoves[2]=new Move3D(i,2,1);
+                    winningMoves[3]=new Move3D(i,3,0);
                 } } }
     
       if (!winner.isSet())
@@ -98,6 +125,10 @@ public class WinningCondition {
                             (grid[3][i][k] !=0))
                     {
                         winner.setBead(model.getPeg(new Move(0,i)).getBead(k));
+                        winningMoves[0]=new Move3D(0,i,k);
+                        winningMoves[1]=new Move3D(1,i,k);
+                        winningMoves[2]=new Move3D(2,i,k);
+                        winningMoves[3]=new Move3D(3,i,k);
                     } }
     
                 if ((grid[0][i][0] == grid[1][i][1]) &&
@@ -106,6 +137,10 @@ public class WinningCondition {
                         (grid[3][i][3] !=0))
                 {
                     winner.setBead(model.getPeg(new Move(0,i)).getBead(0));
+                    winningMoves[0]=new Move3D(0,i,0);
+                    winningMoves[1]=new Move3D(1,i,1);
+                    winningMoves[2]=new Move3D(2,i,2);
+                    winningMoves[3]=new Move3D(3,i,3);
                 }
     
                 if ((grid[0][i][3] == grid[1][i][2]) &&
@@ -114,6 +149,10 @@ public class WinningCondition {
                         (grid[3][i][0] !=0))
                 {
                     winner.setBead(model.getPeg(new Move(0,i)).getBead(3));
+                    winningMoves[0]=new Move3D(0,i,3);
+                    winningMoves[1]=new Move3D(1,i,2);
+                    winningMoves[2]=new Move3D(2,i,1);
+                    winningMoves[3]=new Move3D(3,i,0);
                 } } }
     
       if (!winner.isSet()){
@@ -124,6 +163,10 @@ public class WinningCondition {
                         (grid[3][3][k] !=0))
                 {
                     winner.setBead(model.getPeg(new Move(0,0)).getBead(k));
+                    winningMoves[0]=new Move3D(0,0,k);
+                    winningMoves[1]=new Move3D(1,1,k);
+                    winningMoves[2]=new Move3D(2,2,k);
+                    winningMoves[3]=new Move3D(3,3,k);
                 } }
     
             if ((grid[0][0][0] == grid[1][1][1]) &&
@@ -132,6 +175,10 @@ public class WinningCondition {
                     (grid[3][3][3] !=0))
             {
                 winner.setBead(model.getPeg(new Move(0,0)).getBead(0));
+                winningMoves[0]=new Move3D(0,0,0);
+                winningMoves[1]=new Move3D(1,1,1);
+                winningMoves[2]=new Move3D(2,2,2);
+                winningMoves[3]=new Move3D(3,3,3);
             }
     
             if ((grid[0][0][3] == grid[1][1][2]) &&
@@ -140,6 +187,10 @@ public class WinningCondition {
                     (grid[3][3][0] !=0))
             {
                 winner.setBead(model.getPeg(new Move(0,0)).getBead(3));
+                winningMoves[0]=new Move3D(0,0,3);
+                winningMoves[1]=new Move3D(1,1,2);
+                winningMoves[2]=new Move3D(2,2,1);
+                winningMoves[3]=new Move3D(3,3,0);
             } }
     
       if (!winner.isSet()){
@@ -151,6 +202,10 @@ public class WinningCondition {
                         (grid[3][0][k] !=0))
                 {
                     winner.setBead(model.getPeg(new Move(0,3)).getBead(k));
+                    winningMoves[0]=new Move3D(0,3,k);
+                    winningMoves[1]=new Move3D(1,2,k);
+                    winningMoves[2]=new Move3D(2,1,k);
+                    winningMoves[3]=new Move3D(3,0,k);
                 } }
     
             if ((grid[0][3][0] == grid[1][2][1]) &&
@@ -159,6 +214,10 @@ public class WinningCondition {
                     (grid[3][0][3] !=0))
             {
                 winner.setBead(model.getPeg(new Move(0,3)).getBead(0));
+                winningMoves[0]=new Move3D(0,3,0);
+                winningMoves[1]=new Move3D(1,2,1);
+                winningMoves[2]=new Move3D(2,1,2);
+                winningMoves[3]=new Move3D(3,0,3);
             }
     
             if ((grid[0][3][3] == grid[1][2][2]) &&
@@ -167,6 +226,10 @@ public class WinningCondition {
                     (grid[3][0][0] !=0))
             {
                 winner.setBead(model.getPeg(new Move(0,3)).getBead(3));
+                winningMoves[0]=new Move3D(0,3,3);
+                winningMoves[1]=new Move3D(1,2,2);
+                winningMoves[2]=new Move3D(2,1,1);
+                winningMoves[3]=new Move3D(3,0,0);
             } }
     
       if (moveCount == 64)

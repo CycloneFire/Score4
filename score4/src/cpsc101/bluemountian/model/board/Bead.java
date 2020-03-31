@@ -40,4 +40,12 @@ public class Bead extends Player {
     public Boolean isSet() {
         return set;
     }
+
+//    @Override
+//    public boolean equals(Object obj) {
+//        if(obj instanceof Bead){
+//            return ((Bead) obj).getColor() == super.getColor() && ((Player) obj).getName().equals(super.getName());
+//        }
+//        return false;
+//    }
 }
