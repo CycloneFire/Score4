@@ -15,7 +15,6 @@ public class IntroComponent extends JComponent {
     private JButton botPlayer;
     private JButton about;
     private JButton instruction;
-    private JButton console;
     private JButton quit;
     private static final int FRAME_WIDTH = 600;
     private static final int FRAME_HEIGHT = 250;
@@ -29,7 +28,7 @@ public class IntroComponent extends JComponent {
         JPanel buttons = createButtons();
         add(title, BorderLayout.NORTH);
         add(buttons, BorderLayout.CENTER);
-        console.setEnabled(false);
+        //console.setEnabled(false);
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
     }
 
@@ -44,7 +43,7 @@ public class IntroComponent extends JComponent {
 
     private JPanel createButtons() {
         instruction = new JButton("Instructions");
-        console = new JButton("Console Mode");
+        about = new JButton("About");
         quit = new JButton("Quit");
         singlePlayer = new JButton("Single Player");
         multiPlayer = new JButton("Multi Player");
@@ -88,7 +87,7 @@ public class IntroComponent extends JComponent {
         c.insets = new Insets(10,50,0,0);
         c.gridx = 1;
         c.gridy = 1;
-        panel.add(console, c);
+        panel.add(about, c);
         c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = new Insets(10,10,0,0);
         c.gridx = 2;
@@ -136,14 +135,6 @@ public class IntroComponent extends JComponent {
      */
     public void addInstructionListener(ActionListener listener){
         instruction.addActionListener(listener);
-    }
-
-    /**
-     * Adds a listener for Console button
-     * @param listener listener to add
-     */
-    public void addConsoleListener(ActionListener listener){
-        console.addActionListener(listener);
     }
 
     /**

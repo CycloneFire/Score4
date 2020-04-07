@@ -110,9 +110,9 @@ public class Controller {
             frame.advanceState(3);
 
         });
-
-        component.addInstructionListener(e->showDialog("Instructions",
-                "This was created by Blue Mountain",()->{},true));
+        component.addAboutListener(e->showDialog("About","This game is developed " +
+                "by Team Blue Mountain.",()->{},true));
+        component.addInstructionListener(e->showInstructions());
         component.addQuitListener(e->System.exit(1));
 
     }
@@ -493,15 +493,36 @@ public class Controller {
         gameManager();
     }
 
+    private void showInstructions(){
+        JDialog dialog = new JDialog(frame,"Instructions");
+        dialog.setLayout(new BorderLayout());
+        String text = "Score Four is a two-player board game in which the players first choose a color and then take"+
+                " turns dropping one colored bead from the top into a four-column, four-row vertically" +
+                " suspended pegs with four floor depth. The beads fall straight down, occupying the lowest" +
+                " available floor within the peg. The objective of the game is to be the first to form a" +
+                " horizontal, vertical, or diagonal line of four of one's own beads. Score Four is a solved" +
+                " game. The first player can always win by playing the right moves.";
+        JTextArea textArea = new JTextArea(text);
+        textArea.setLineWrap(true);
+
+        JButton okBtn = new JButton("OK");
+        okBtn.addActionListener(e->dialog.setVisible(false));
+        okBtn.setPreferredSize(new Dimension(65,35));
+
+        dialog.setLayout(new BorderLayout());
+        dialog.setSize(500, 300);
+        dialog.add(textArea,BorderLayout.CENTER);
+        dialog.add(okBtn,BorderLayout.SOUTH);
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+
+    }
     private void showDialog(String title,String errorMsg,Runnable runner, boolean centered){
         JDialog dialog = new JDialog(frame, title);
-        //dialog.setUndecorated(true);
-        //dialog.setOpacity(0.7f);
         dialog.setLayout(new BorderLayout());
-
         JLabel label = new JLabel(errorMsg);
         label.setHorizontalAlignment(JLabel.CENTER);
-        label.setPreferredSize(new Dimension(200,50));
+        label.setPreferredSize(new Dimension(250,80));
 
         JButton okBtn = new JButton("OK");
         okBtn.addActionListener(e->{

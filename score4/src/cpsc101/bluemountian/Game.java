@@ -14,7 +14,6 @@ public class Game {
     private WatchedBoard board; // Model
     private ComponentManager frame; // View
     private Controller controller;  // Controller
-
     private void go(){
         WatchedBoard board = new WatchedBoard();    // Model
         ComponentManager frame = new ComponentManager();    // View

@@ -19,6 +19,8 @@ public class ComponentManager extends JFrame {
      * Constructs a component manager
      */
     public ComponentManager(){
+        ImageIcon icon = new ImageIcon("score4\\src\\score4.png");
+        setIconImage(icon.getImage());
         setMinimumSize(new Dimension(600,250));
         setTitle("Score 4");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

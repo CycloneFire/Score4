@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="score4:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/score4_jar</output-path>
+    <root id="archive" name="score4.jar">
+      <element id="module-output" name="score4" />
+      <element id="module-source" name="score4" />
+    </root>
+  </artifact>
+</component>
