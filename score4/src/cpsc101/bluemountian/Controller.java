@@ -7,7 +7,6 @@ import cpsc101.bluemountian.model.player.HumanPlayer;
 import cpsc101.bluemountian.model.player.Player;
 import cpsc101.bluemountian.view.ComponentManager;
 import cpsc101.bluemountian.view.components.*;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -17,7 +16,11 @@ import java.time.Clock;
 import java.util.ArrayList;
 import java.util.Random;
 
-
+/**
+ * Provides a way to control all actions performed on the view and reflect them on the model and vice-versa
+ *
+ * @author Suyash
+ */
 public class Controller {
     private WatchedBoard board;
     private ComponentManager frame;
@@ -36,12 +39,16 @@ public class Controller {
     private int moveCount=0;
 
 
-
-
+    /**
+     * Constructs a controller for given board and view
+     * @param board board to build view for
+     * @param frame view to display board on
+     */
     public Controller(WatchedBoard board, ComponentManager frame) {
         this.board = board;
         this.frame = frame;
         addActions();
+        gameEnded.add(false);
         currentRun++;
         gameEnded.add(false);
         this.board.addAction(()->{
@@ -323,23 +330,25 @@ public class Controller {
         firstMoveSet=false;
         gameEnded.set(currentRun,true);
         board.reInit();
+        game.getRightPanel().disableButton(3);
         game.getBoardComponent().reInit();
         win = new WinningCondition(board,player1[0].getColor());
+        gameEnded.add(false);
         currentRun++;
     }
 
     private void gameManager(){
         int threadNum = currentRun;
-        gameEnded.add(false);
         Thread T = new Thread(()->{
             while(!gameEnded.get(threadNum)) {
+                if(moveCount==1)game.getRightPanel().enableButton(3);
                 if (gameMode == 0) {
                     if(!currentTurn){
                         while(!((HumanPlayer) player1[0]).getHasMove() && !gameEnded.get(currentRun)){
                             Thread.onSpinWait();
                         }
                         if(!firstMoveSet)firstMoveSet=true;
-                        if(!gameEnded.get(currentRun)){
+                        if(!gameEnded.get(threadNum)){
                             board.addBead(((CanPlay) player1[0]).getMove(),player1[0]);
                         }
                     }else{
@@ -356,13 +365,13 @@ public class Controller {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        if(!gameEnded.get(currentRun)){
+                        if(!gameEnded.get(threadNum)){
                             board.addBead(((CanPlay) player2[0]).getMove(),player2[0]);
                         }
                     }
                 }else if (gameMode == 1) {
                     if(!currentTurn){
-                        while (!((HumanPlayer) player1[0]).getHasMove() && !gameEnded.get(currentRun)){
+                        while (!((HumanPlayer) player1[0]).getHasMove() && !gameEnded.get(threadNum)){
                             Thread.onSpinWait();
                         }
 
@@ -370,7 +379,7 @@ public class Controller {
                             board.addBead(((CanPlay) player1[0]).getMove(),player1[0]);
                         }
                     }else{
-                        while (!((HumanPlayer) player2[0]).getHasMove() && !gameEnded.get(currentRun)){
+                        while (!((HumanPlayer) player2[0]).getHasMove() && !gameEnded.get(threadNum)){
                             Thread.onSpinWait();
                         }
                         if(!gameEnded.get(threadNum)){
@@ -383,7 +392,7 @@ public class Controller {
                     if(!currentTurn){
                         try {
                             if(!firstMoveSet){
-                                firstMoveSet=true;
+                                if(moveCount==1)firstMoveSet=true;
                                 ((ArtificialPlayer) player1[0]).setRandomMove();    // Play random at first
                             }
                             else {
@@ -406,7 +415,7 @@ public class Controller {
                     }else{
                         try {
                             if(!firstMoveSet){
-                                firstMoveSet=true;
+                                if(moveCount==1)firstMoveSet=true;
                                 ((ArtificialPlayer) player2[0]).setRandomMove();    // Play random at first
                             }
                             else{
@@ -476,7 +485,7 @@ public class Controller {
     }
 
     private void addGameToFrame(){
-        game = new GameComponent(board,player1[0].getColor(),player2[0].getColor());
+        game = new GameComponent(board);
         win = new WinningCondition(board,player1[0].getColor());
         frame.addComponent(game);
         actionManagerBoard(game);

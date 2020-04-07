@@ -4,7 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-
+/**
+ * Provides an interface for selecting game modes and other basic options
+ *
+ * @author Sebastian
+ */
 public class IntroComponent extends JComponent {
     private JButton singlePlayer;
     private JButton multiPlayer;
@@ -16,6 +20,9 @@ public class IntroComponent extends JComponent {
     private static final int FRAME_WIDTH = 600;
     private static final int FRAME_HEIGHT = 250;
 
+    /**
+     * Constructs this component's UI
+     */
     public IntroComponent(){
         setLayout(new BorderLayout());
         JLabel title = createTitle();
@@ -91,24 +98,58 @@ public class IntroComponent extends JComponent {
         return panel;
     }
 
+    /**
+     * Adds a listener for About button
+     * @param listener listener to add
+     */
     public void addAboutListener(ActionListener listener){
         about.addActionListener(listener);
     }
+
+    /**
+     * Adds a listener for Human vs A.I button
+     * @param listener listener to add
+     */
     public void addSinglePlayerListener(ActionListener listener){
         singlePlayer.addActionListener(listener);
     }
+
+    /**
+     * Adds a listener for Human vs Human button
+     * @param listener listener to add
+     */
     public void addMultiPlayerListener(ActionListener listener){
         multiPlayer.addActionListener(listener);
     }
+
+    /**
+     * Adds a listener for A.I vs A.I button
+     * @param listener listener to add
+     */
     public void addBotPlayerListener(ActionListener listener){
         botPlayer.addActionListener(listener);
     }
+
+    /**
+     * Adds a listener for Instructions button
+     * @param listener listener to add
+     */
     public void addInstructionListener(ActionListener listener){
         instruction.addActionListener(listener);
     }
+
+    /**
+     * Adds a listener for Console button
+     * @param listener listener to add
+     */
     public void addConsoleListener(ActionListener listener){
         console.addActionListener(listener);
     }
+
+    /**
+     * Adds a listener for Quit button
+     * @param listener listener to add
+     */
     public void addQuitListener(ActionListener listener){
         quit.addActionListener(listener);
     }

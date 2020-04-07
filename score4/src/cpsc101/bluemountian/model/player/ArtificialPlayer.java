@@ -1,41 +1,59 @@
 package cpsc101.bluemountian.model.player;
 
 import cpsc101.bluemountian.model.board.*;
-
 import java.awt.*;
 import java.util.Random;
 
+/**
+ * Provides an artificial player to game that calculates it's own moves
+ *
+ * @author Suyash
+ */
 public class ArtificialPlayer extends Player implements CanPlay{
     private Move move;
-    private Boolean hasMove = false;
     private Player opposition;
     private final static int SEARCH_DEPTH = 5;
 
+    /**
+     * Constructs an A.I with passed name and color
+     * @param name name of A.I
+     * @param color color of A.I
+     */
     public ArtificialPlayer(String name, Color color) {
         super(name, color);
     }
 
+    /**
+     *
+     * @return the move calculated
+     */
     @Override
     public Move getMove() {
-        hasMove=false;
         return move;
     }
 
+    /**
+     * No need to make changes here for an A.I player
+     */
     @Override
     public void resetMove() {
-        hasMove=false;
     }
 
+    /**
+     * Sets a random move for the A.I
+     */
     public void setRandomMove(){
-        hasMove=true;
         Random random = new Random();
         int randomPeg=random.nextInt(16);
-        //System.out.println(((randomPeg/4)-1)+" good "+((randomPeg%4)));
         move=new Move(randomPeg/4,randomPeg%4);
     }
 
+    /**
+     * Calculates the best move for A.I and sets it
+     * @param board Current situation of board
+     * @param opposition Opposing player required for calculation
+     */
     public void setMove(Board board,Player opposition){
-        hasMove=true;
         this.opposition=opposition;
         move=null;  // Empty the move
         miniMax(board,SEARCH_DEPTH,Integer.MIN_VALUE,Integer.MAX_VALUE,true);

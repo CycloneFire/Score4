@@ -1,9 +1,12 @@
 package cpsc101.bluemountian.model.board;
 
-import cpsc101.bluemountian.model.player.Player;
-
 import java.awt.*;
 
+/**
+ * Provides a way to find out whether or not the game has been won yet
+ *
+ * @author Rohit
+ */
 public class WinningCondition {
     private Bead winner = new Bead();
     private int[][][] grid = new int[4][4][4];
@@ -12,6 +15,11 @@ public class WinningCondition {
     private Color p1Col;
     private Move3D[] winningMoves;
 
+    /**
+     * Constructs the win evaluator
+     * @param model board to check
+     * @param p1Col color of first player
+     */
     public WinningCondition(Board model,Color p1Col){
         this.model=model;
         this.p1Col=p1Col;
@@ -21,6 +29,10 @@ public class WinningCondition {
                         new Move3D(2, 2, 2), new Move3D(3, 3, 3)};
     }
 
+    /**
+     *
+     * @return Array of moves that caused the game to end
+     */
     public Move3D[] getWinningMove(){
         return winningMoves;
     }
@@ -40,20 +52,20 @@ public class WinningCondition {
         }
     }
 
-    public int getMoveCount() {
-        return moveCount;
-    }
-
-    public int corX(int i){
+    private int corX(int i){
         int x;
         x = (i - 1) % 4;
         return x;}
 
-    public int corY(int i){
+    private int corY(int i){
         int y;
         y = ((i - 1) / 4);
         return y;}
-    
+
+    /**
+     *
+     * @return A bead that contains the winning player if someone won otherwise it's empty
+     */
     public Bead winCheck(){
         boardToGrid();
       for (int i = 1; i < 17; i++)
@@ -231,11 +243,7 @@ public class WinningCondition {
                 winningMoves[2]=new Move3D(2,1,1);
                 winningMoves[3]=new Move3D(3,0,0);
             } }
-    
-      if (moveCount == 64)
-        {
-            winner= new Bead(new Player("DRAW",Color.CYAN));
-        }
+
             return winner;
        }
 

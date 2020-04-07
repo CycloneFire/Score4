@@ -31,6 +31,7 @@ public class RightPanel extends JPanel {
         add(infoPanel, BorderLayout.NORTH);
         add(buttonsPanel, BorderLayout.SOUTH);
         goConsoleModeButton.setEnabled(false);
+        startNewGameButton.setEnabled(false);
     }
 
     private JPanel createInfoPanel() {

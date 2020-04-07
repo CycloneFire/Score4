@@ -4,6 +4,11 @@ import cpsc101.bluemountian.model.player.Player;
 
 import java.awt.*;
 
+/**
+ * Provides a way to make a static evaluation of the board and how it favours or disfavors certain player
+ *
+ * @author Suyash
+ */
 public class EvaluateBoard{
     private static final int PATTERN_CONSTANT_1 = 3;  // Weight 1 cell alone carries in board evaluation
     private static final int PATTERN_CONSTANT_2 = 10;  // Weight 2 in a row carries in board evaluation
@@ -15,22 +20,39 @@ public class EvaluateBoard{
     private int score=0;
     private int[][][] grid = new int[4][4][4];
 
+    /**
+     * Construct evaluator and sets maximizing player.
+     * @param grid Grid to make evaluations for.
+     * @param maximizingPlayer Determines whether current evaluation is a positive or negative
+     */
     public EvaluateBoard(int[][][] grid, Player maximizingPlayer){
         this.grid=grid;
         this.maximizingPlayer=maximizingPlayer;
     }
 
+    /**
+     * Constructs evaluator and sets maximizing player.
+     * @param model Board to make evaluations for.
+     * @param maximizingPlayer Determines whether current evaluation is a positive or negative
+     */
     public EvaluateBoard(Board model, Player maximizingPlayer){
         this.maximizingPlayer = maximizingPlayer;
         this.model = model;
         boardToGrid();
     }
 
+    /**
+     *
+     * @return Score of this board, positive for maximizing player and negative otherwise.
+     */
     public int getScore() {
         evaluate();
         return score;
     }
 
+    /**
+     * Finds different patterns in the board and sends them to pattern finder for scoring
+     */
     private void evaluate() {
         Bead winCheck = new WinningCondition(model, maximizingPlayer.getColor()).winCheck();
         if (winCheck.isSet()) {
@@ -94,6 +116,11 @@ public class EvaluateBoard{
         //Anti-Inverse mid-body diagonal
     }
 
+    /**
+     * Scores given 4 Beads and scores them based on their value to game logic
+     * @param beads Array of beads to find score for
+     * @return final score of 4 beads based on x-in-a-row pattern
+     */
     private int linePatternScoreFinder(int[] beads){
         int length=0;   // Start with a base value of pattern as 0
         int patternStart=0; // Pattern starts for which player

@@ -3,11 +3,15 @@ package cpsc101.bluemountian.view.components;
 import cpsc101.bluemountian.model.board.Board;
 import cpsc101.bluemountian.model.board.Move3D;
 import cpsc101.bluemountian.model.player.Player;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.font.TextLayout;
 
+/**
+ * Provides a way to display the model on screen
+ *
+ * @author Sebastian
+ */
 public class BoardComponent extends JComponent{
 
     private int hoverX = 10;
@@ -35,11 +39,18 @@ public class BoardComponent extends JComponent{
     boolean showWinningBeads;
 
 
+    /**
+     * Constructs a board view from provided board model
+     * @param model
+     */
     public BoardComponent(Board model) {
         this.model = model;
         reInit();
     }
 
+    /**
+     * Re-initialises all variables for re-use without dumping this object
+     */
     public void reInit(){
         winAnimation = false;
         beadAnimation = false;
@@ -58,6 +69,10 @@ public class BoardComponent extends JComponent{
         timer.setCoalesce(true);
     }
 
+    /**
+     * Set model for the board view
+     * @param model model to set
+     */
     public void setModel(Board model) {
         this.model = model;
     }
@@ -278,6 +293,14 @@ public class BoardComponent extends JComponent{
         }
     }
 
+    /**
+     * Draws a semi-transparent bead on provided indices
+     *
+     * @param i x co-ordinate
+     * @param j y co-ordinate
+     * @param k z co-ordinate
+     * @param hoverColor Color of the hover effect
+     */
     public void setHoverLocation(int i, int j, int k, Color hoverColor) {
         hoverX = j;
         hoverY = i;
@@ -312,11 +335,18 @@ public class BoardComponent extends JComponent{
         g2.setClip(outline);
     }
 
-    //Stuff that needs to be set
+    /**
+     * Set the winner for this board
+     * @param winner player to set as winner
+     */
     public void setWinner(Player winner) {
         this.winner = winner;
     }
 
+    /**
+     * Sets the winning beads for this board
+     * @param move3D winning move
+     */
     public void setWinningBeads(Move3D[] move3D){
         for(int i = 0; i < 4; i++){
             winningBeadsX[i] = move3D[i].getX();

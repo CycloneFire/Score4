@@ -1,18 +1,23 @@
 package cpsc101.bluemountian.view;
 
-import cpsc101.bluemountian.view.components.BoardComponent;
 import cpsc101.bluemountian.view.components.IntroComponent;
 import cpsc101.bluemountian.view.components.PlayerInfoComponent;
-import cpsc101.bluemountian.view.components.TurnComponent;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
+/**
+ * Provides an easy way to advance/retreat current screen based on ScreenPlay (decided beforehand)
+ *
+ * @author Suyash
+ */
 public class ComponentManager extends JFrame {
     private int currentState=0;
     private ArrayList<JComponent> components = new ArrayList<JComponent>();
 
+    /**
+     * Constructs a component manager
+     */
     public ComponentManager(){
         setMinimumSize(new Dimension(600,250));
         setTitle("Score 4");
@@ -32,6 +37,9 @@ public class ComponentManager extends JFrame {
 
     }
 
+    /**
+     * Re-initialises all screens and resets them, retreat to first screen
+     */
     public void reInit(){
         remove(components.get(currentState));
         components.removeAll(components);
@@ -46,17 +54,34 @@ public class ComponentManager extends JFrame {
         setLocationRelativeTo(null);
     }
 
+    /**
+     *
+     * @param n index of component
+     * @return component at passed index
+     */
     @Override
     public JComponent getComponent(int n) {
         return components.get(n);
     }
 
+    /**
+     * Adds passed component to screenplay list
+     * @param component component to add
+     */
     public void addComponent(JComponent component){components.add(component);}
 
+    /**
+     *
+     * @return Number of current screen in screenplay
+     */
     public int getCurrentState() {
         return currentState;
     }
 
+    /**
+     * Advance/retreat state by redrawing and restructuring the frame to given index in screenplay.
+     * @param n index to advance/retreat by
+     */
     public void advanceState(int n){
         //Removal and advance
         this.remove(components.get(currentState));
