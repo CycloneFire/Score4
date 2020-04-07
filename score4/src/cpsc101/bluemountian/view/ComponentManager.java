@@ -5,6 +5,7 @@ import cpsc101.bluemountian.view.components.PlayerInfoComponent;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Provides an easy way to advance/retreat current screen based on ScreenPlay (decided beforehand)
@@ -19,7 +20,7 @@ public class ComponentManager extends JFrame {
      * Constructs a component manager
      */
     public ComponentManager(){
-        ImageIcon icon = new ImageIcon("score4\\src\\score4.png");
+        ImageIcon icon = new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("score4.png")));
         setIconImage(icon.getImage());
         setMinimumSize(new Dimension(600,250));
         setTitle("Score 4");

@@ -110,8 +110,10 @@ public class Controller {
             frame.advanceState(3);
 
         });
-        component.addAboutListener(e->showDialog("About","This game is developed " +
-                "by Team Blue Mountain.",()->{},true));
+//        component.addAboutListener(e->showDialog("About","This game is developed " +
+//                "by Team Blue Mountain.",()->{},true));
+        component.addAboutListener(e->showDialog("About",System.getProperty("user.dir"),()->{},true));
+
         component.addInstructionListener(e->showInstructions());
         component.addQuitListener(e->System.exit(1));
 
